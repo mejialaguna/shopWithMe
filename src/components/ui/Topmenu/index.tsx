@@ -1,9 +1,11 @@
-import { titleFonts } from '@/config/font';
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
+import { titleFonts } from '@/config/font';
 import { IoCartOutline, IoSearchOutline } from 'react-icons/io5';
+import { Buttom } from '@/components';
 
 export const TopMenu = () => {
+  console.log('server')
   return (
     <nav className='flex px-5 justify-between items-center w-full'>
       <div>
@@ -34,12 +36,12 @@ export const TopMenu = () => {
           Kids
         </Link>
       </div>
-      <div className='flex items-center'>
-        <Link href='/search' className='mx-2'>
+      <div className='flex items-center transition-all'>
+        <Link href='/search' className=' p-2 rounded-md hover:bg-gray-100'>
           <IoSearchOutline className='w-5 h-5' />
         </Link>
 
-        <Link href='/cart' className='mx-2'>
+        <Link href='/cart' className='p-2 rounded-md hover:bg-gray-100'>
           <div className='relative'>
             <span className='absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-blue-700 text-white'>
               2
@@ -47,9 +49,7 @@ export const TopMenu = () => {
             <IoCartOutline className='W-5 h-5' />
           </div>
         </Link>
-        <button className='p-2 rounded-md transition-all hover:bg-gray-100'>
-          menu
-        </button>
+        <Buttom />
       </div>
     </nav>
   );
