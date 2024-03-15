@@ -1,4 +1,4 @@
-import { ProductMobileSlideShow, ProductSlideShow, QuantitySelector, SizeSelector, SlideShowWrapper } from '@/components';
+import { ProductMobileSlideShow, ProductSlideShow, QuantitySelector, SizeSelector } from '@/components';
 import { titleFonts } from '@/config/font';
 import { Product } from '@/interfaces';
 import { initialData } from '@/seed/seed';
