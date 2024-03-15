@@ -4,3 +4,6 @@ export * from './ui/not-found/PageNotFound';
 export * from './products/product-grid/ProductGrid';
 export * from './products/product-grid/ProductGridItem';
 export * from './Bottom';
+export * from './product/SizeSelector';
+export * from './product/QuantitySelector';
+export * from './product/ProductSlideShow';

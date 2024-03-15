@@ -2,10 +2,10 @@
 
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Product } from '@/interfaces';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
 
 interface ProductProps {
   products: Product;
@@ -22,8 +22,7 @@ export const ProductGridItem = ({ products, idx }: ProductProps) => {
 
   return (
     <div
-      key={products?.slug}
-      className='relative group block p-2 h-full w-full fade-in'
+      className='relative group block p-2 fade-in'
       onMouseEnter={() => setHoverIndex(idx)}
       onMouseLeave={() => setHoverIndex(null)}
     >
@@ -46,15 +45,15 @@ export const ProductGridItem = ({ products, idx }: ProductProps) => {
       </AnimatePresence>
       <div
         className={cn(
-          'rounded-2xl h-full w-full p-1.5 overflow-hidden bg-black border opacity-70 border-transparent dark:border-white/[0.2] transition-all duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20'
+          'rounded-2xl overflow-hidden bg-black border opacity-80 border-transparent dark:border-white/[0.2] transition-all duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20'
         )}
       >
         <div className='relative z-50'>
           <div className='p-4 flex flex-col'>
             <Image
-              className='self-center rounded-md transition-all duration-1000'
-              width={500}
-              height={500}
+              className='self-center rounded-md transition-all duration-1000 bg-white'
+              width={400}
+              height={400}
               src={`/products/${showImage}`}
               alt='product image'
               priority
@@ -65,7 +64,7 @@ export const ProductGridItem = ({ products, idx }: ProductProps) => {
               className={cn(
                 'text-zinc-100 mt-4 hover:text-blue-600 duration-300'
               )}
-              href={`products/${products.slug}`}
+              href={`product/${products.slug}`}
             >
               {products.title}
             </Link>

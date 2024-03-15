@@ -5,7 +5,6 @@ import { IoCartOutline, IoSearchOutline } from 'react-icons/io5';
 import { Buttom } from '@/components';
 
 export const TopMenu = () => {
-  console.log('server')
   return (
     <nav className='flex px-5 justify-between items-center w-full'>
       <div>
@@ -25,13 +24,13 @@ export const TopMenu = () => {
         </Link>
         <Link
           className='p-2 rounded-md transition-all hover:bg-gray-100'
-          href='/category/womens'
+          href='/category/women'
         >
           womens
         </Link>
         <Link
           className='p-2 rounded-md transition-all hover:bg-gray-100'
-          href='/category/kids'
+          href='/category/kid'
         >
           Kids
         </Link>

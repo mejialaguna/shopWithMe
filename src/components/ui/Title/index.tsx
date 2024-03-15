@@ -7,7 +7,6 @@ interface TitleProp {
 }
 
 export const Title = ({ title, subTitle = '', customClasses = '' }: TitleProp) => {
-  console.log({ title, subTitle, customClasses });
   return (
     <div className={`mt-3 ${customClasses}`}>
       <h1

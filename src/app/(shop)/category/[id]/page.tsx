@@ -1,18 +1,32 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
+import { initialData } from '@/seed/seed';
+import { ProductGrid } from '@/components';
+import { Product } from '@/interfaces';
+import { Title } from '@/components/ui/Title';
 
-export interface PageProps{
+type validCategories =  'men' | 'women' | 'kid' | 'unisex';
+export interface PageProps {
   params: {
-    id: string;
-  }
+    id: validCategories;
+  };
 }
-export default function ({params}:PageProps) {
+export default function ({ params }: PageProps) {
   const { id } = params;
-  if (!['kids', 'men', 'womens'].includes(id)) {
+  const products = initialData.products.filter(
+    (product: Product) => product.gender === id
+  );
+
+  if (!['kid', 'men', 'women'].includes(id)) {
     notFound();
   }
-    return (
-      <div>
-        <h1>category Page {id}</h1>
-      </div>
-    );
+  return (
+    <>
+      <Title
+        title='store'
+        subTitle={`${id === 'kid' ? id + 's' : id}  products`}
+        customClasses='pl-5 capitalize'
+      />
+      <ProductGrid products={products} />
+    </>
+  );
 }
