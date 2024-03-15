@@ -1,35 +1,35 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-import './slideshow.css';
+import 'swiper/css/pagination';
+import '../ProductSlideShow/slideshow.css';
 
 import {
   Autoplay,
   FreeMode,
-  Navigation,
   Thumbs,
+  Pagination,
 } from 'swiper/modules';
 
 import Image from 'next/image';
 
-interface ProductSlideShowProp {
+interface ProductMobileSlideShowProp {
   images: string[];
   title: string;
   customClasses?: string;
 }
 
-export const ProductSlideShow = ({
+export const ProductMobileSlideShow = ({
   images,
   title,
   customClasses,
-}: ProductSlideShowProp) => {
+}: ProductMobileSlideShowProp) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
@@ -37,7 +37,7 @@ export const ProductSlideShow = ({
       <Swiper
         style={
           {
-            '--swiper-navigation-color': '#fff',
+            '--swiper-pagination-color': '#fff',
           } as React.CSSProperties
         }
         loop={true}
@@ -46,9 +46,11 @@ export const ProductSlideShow = ({
           delay: 4000,
           disableOnInteraction: false,
         }}
-        navigation={true}
+        pagination={{
+          clickable: true,
+        }}
         thumbs={{ swiper: thumbsSwiper }}
-        modules={[Autoplay, FreeMode, Navigation, Thumbs]}
+        modules={[Autoplay, FreeMode, Thumbs, Pagination]}
         className='mySwiper2'
       >
         {images.map((img: string) => (
@@ -70,7 +72,7 @@ export const ProductSlideShow = ({
         slidesPerView={4}
         freeMode={true}
         watchSlidesProgress={true}
-        modules={[FreeMode, Navigation, Thumbs]}
+        modules={[FreeMode, Thumbs]}
         className='mySwiper'
       >
         {images.map((img: string) => (

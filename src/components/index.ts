@@ -7,3 +7,5 @@ export * from './Bottom';
 export * from './product/SizeSelector';
 export * from './product/QuantitySelector';
 export * from './product/ProductSlideShow';
+export * from './product/ProductMobileSlideShow';
+export * from './product/SlideShowWrapper';
