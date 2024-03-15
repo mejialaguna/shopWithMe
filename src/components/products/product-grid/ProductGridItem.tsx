@@ -45,7 +45,9 @@ export const ProductGridItem = ({ products, idx }: ProductProps) => {
       </AnimatePresence>
       <div
         className={cn(
-          'rounded-2xl overflow-hidden bg-black border opacity-80 border-transparent dark:border-white/[0.2] transition-all duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20'
+          `rounded-2xl overflow-hidden bg-black border opacity-80
+          border-transparent dark:border-white/[0.2] transition-all
+          duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20`
         )}
       >
         <div className='relative z-50'>

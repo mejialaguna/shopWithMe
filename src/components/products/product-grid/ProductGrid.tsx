@@ -1,6 +1,5 @@
 import { Product } from '@/interfaces';
 import { ProductGridItem } from './ProductGridItem';
-import { cn } from '@/utils/cn';
 interface ProductProps {
   products: Product[];
 }

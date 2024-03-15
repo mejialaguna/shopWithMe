@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
+import { Swiper as SwiperObject } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
@@ -9,7 +11,6 @@ import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 import '../ProductSlideShow/slideshow.css';
-
 import {
   Autoplay,
   FreeMode,
@@ -17,7 +18,6 @@ import {
   Pagination,
 } from 'swiper/modules';
 
-import Image from 'next/image';
 
 interface ProductMobileSlideShowProp {
   images: string[];
@@ -27,10 +27,9 @@ interface ProductMobileSlideShowProp {
 
 export const ProductMobileSlideShow = ({
   images,
-  title,
   customClasses,
 }: ProductMobileSlideShowProp) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>();
 
   return (
     <div className={customClasses}>
@@ -83,7 +82,8 @@ export const ProductMobileSlideShow = ({
               alt={img}
               width={200}
               height={200}
-              sizes='(min-width: 1040px) calc(40vw - 34px), (min-width: 800px) calc(65.91vw - 56px), (min-width: 640px) 85vw, (min-width: 400px) 99.09vw, calc(73.75vw + 76px)'
+              sizes='(min-width: 1040px) calc(40vw - 34px), (min-width: 800px)
+              calc(65.91vw - 56px), (min-width: 640px) 85vw, (min-width: 400px) 99.09vw, calc(73.75vw + 76px)'
             />
           </SwiperSlide>
         ))}

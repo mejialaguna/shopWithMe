@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Swiper as SwiperObject } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
@@ -27,10 +28,9 @@ interface ProductSlideShowProp {
 
 export const ProductSlideShow = ({
   images,
-  title,
   customClasses,
 }: ProductSlideShowProp) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>();
 
   return (
     <div className={customClasses}>
@@ -81,7 +81,8 @@ export const ProductSlideShow = ({
               alt={img}
               width={200}
               height={200}
-              sizes='(min-width: 1040px) calc(40vw - 34px), (min-width: 800px) calc(65.91vw - 56px), (min-width: 640px) 85vw, (min-width: 400px) 99.09vw, calc(73.75vw + 76px)'
+              sizes='(min-width: 1040px) calc(40vw - 34px), (min-width: 800px)
+              calc(65.91vw - 56px), (min-width: 640px) 85vw, (min-width: 400px) 99.09vw, calc(73.75vw + 76px)'
             />
           </SwiperSlide>
         ))}

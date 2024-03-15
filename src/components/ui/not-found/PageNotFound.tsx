@@ -1,10 +1,7 @@
 import React from 'react';
-import { titleFonts } from '@/config/font';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import notFoundImage from '../../../../public/imgs/13315300_5203299.jpg';
-import { useParams } from 'next/navigation';
 
 export const PageNotFound = () => {
   return (

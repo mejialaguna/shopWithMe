@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { titleFonts } from '@/config/font';
 import { IoCartOutline, IoSearchOutline } from 'react-icons/io5';
+import { titleFonts } from '@/config/font';
 import { Buttom } from '@/components';
 
 export const TopMenu = () => {

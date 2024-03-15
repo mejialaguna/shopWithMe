@@ -1,6 +1,7 @@
 'use client';
-import { useUiStore } from '@/store/ui/ui-store';
+
 import React from 'react';
+import { useUiStore } from '@/store/ui/ui-store';
 
 export const Buttom = () => {
   const { openSideMenu } = useUiStore((state) => ({

@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import {
@@ -12,14 +13,13 @@ import {
   IoTicketOutline,
 } from 'react-icons/io5';
 import { useUiStore } from '@/store/ui/ui-store';
+
 export const SideBar = () => {
- const { isSideMenuOpen, closeSideMenu } = useUiStore(
-   (state) => ({
-     isSideMenuOpen: state.isSideMenuOpen,
-     openSideMenu: state.openSideMenu,
-     closeSideMenu: state.closeSideMenu,
-   })
- );
+  const { isSideMenuOpen, closeSideMenu } = useUiStore((state) => ({
+    isSideMenuOpen: state.isSideMenuOpen,
+    openSideMenu: state.openSideMenu,
+    closeSideMenu: state.closeSideMenu,
+  }));
 
   return (
     <div>
@@ -34,7 +34,9 @@ export const SideBar = () => {
       )}
 
       <nav
-        className={`fixed p-5 right-0 top-0 w-80 bg-white h-screen z-20 shadow-2xl transform transition-all duration-300 ${!isSideMenuOpen && 'translate-x-full'}`}
+        className={`fixed p-5 right-0 top-0 w-80 bg-white h-screen z-20
+        shadow-2xl transform transition-all duration-300
+        ${!isSideMenuOpen && 'translate-x-full'}`}
       >
         <IoCloseOutline
           className='absolute right-5 cursor-pointer'
