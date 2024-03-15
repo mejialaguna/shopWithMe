@@ -32,7 +32,7 @@ export const ProductMobileSlideShow = ({
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>();
 
   return (
-    <div className={customClasses}>
+    <div className={`${customClasses}`}>
       <Swiper
         style={
           {

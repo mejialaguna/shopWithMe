@@ -1,4 +1,4 @@
-import { QuantitySelector, SizeSelector, SlideShowWrapper } from '@/components';
+import { ProductMobileSlideShow, ProductSlideShow, QuantitySelector, SizeSelector, SlideShowWrapper } from '@/components';
 import { titleFonts } from '@/config/font';
 import { Product } from '@/interfaces';
 import { initialData } from '@/seed/seed';
@@ -24,8 +24,16 @@ export default function ({ params }: PageProps) {
   return (
     <div className='mt-5 mb-20 flex flex-col md:grid md:grid-cols-3 gap-3'>
       <div className='col-span-1 md:col-span-2'>
-        {/* <ProductSlideShow images={product.images} title={product.title} customClasses='' /> */}
-        <SlideShowWrapper images={product.images} title={product.title} />
+        <ProductSlideShow
+          images={product.images}
+          title={product.title}
+          customClasses='hidden sm:block'
+        />
+        <ProductMobileSlideShow
+          images={product.images}
+          title={product.title}
+          customClasses='max-[639px]:block hidden'
+        />
       </div>
 
       <div className='col-span-1 px-5'>

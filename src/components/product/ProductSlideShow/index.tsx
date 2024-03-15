@@ -31,9 +31,9 @@ export const ProductSlideShow = ({
   customClasses,
 }: ProductSlideShowProp) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>();
-
+  console.log({customClasses})
   return (
-    <div className={customClasses}>
+    <div className={`helloe ${customClasses}`}>
       <Swiper
         style={
           {
