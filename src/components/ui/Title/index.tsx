@@ -8,15 +8,15 @@ interface TitleProp {
 
 export const Title = ({ title, subTitle = '', customClasses = '' }: TitleProp) => {
   return (
-    <div className={`mt-3 ${customClasses}`}>
+    <div
+      className={`flex flex-row justify-between mt-3 px-0 sm:px-10 ${customClasses}`}
+    >
       <h1
-        className={`antialiased text-4xl font-semibold my-7 ${titleFonts.className}`}
+        className={`antialiased text-4xl font-semibold ${titleFonts.className}`}
       >
         {title}
       </h1>
-      {subTitle && <h3 className='text-xl mb-5'>
-        {subTitle}
-      </h3> }
+      {subTitle && <h3 className='text-xl capitalize'>{subTitle}</h3>}
     </div>
   );
 };

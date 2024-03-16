@@ -6,7 +6,7 @@ export default function Home() {
   const products = initialData.products;
   return (
     <div className='mx-2 sm:mx-0'>
-      <Title title='store' subTitle='All products' customClasses='ml-2 sm:ml-0'/>
+      <Title title='Store' subTitle='All products' customClasses='mx-3 sm:ml-0'/>
       <ProductGrid products={products} />
     </div>
   );

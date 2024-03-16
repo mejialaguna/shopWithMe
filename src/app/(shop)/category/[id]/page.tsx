@@ -22,9 +22,9 @@ export default function ({ params }: PageProps) {
   return (
     <>
       <Title
-        title='store'
+        title='Store'
         subTitle={`${id === 'kid' ? id + 's' : id}  products`}
-        customClasses='pl-5 capitalize'
+        customClasses='px-3 items-center'
       />
       <ProductGrid products={products} />
     </>
