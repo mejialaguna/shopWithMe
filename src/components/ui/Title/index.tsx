@@ -9,7 +9,7 @@ interface TitleProp {
 export const Title = ({ title, subTitle = '', customClasses = '' }: TitleProp) => {
   return (
     <div
-      className={`flex flex-row justify-between mt-3 px-0 sm:px-10 ${customClasses}`}
+      className={`flex flex-row justify-between mt-3 ${customClasses}`}
     >
       <h1
         className={`antialiased text-4xl font-semibold ${titleFonts.className}`}

@@ -4,7 +4,7 @@ import { titleFonts } from '@/config/font';
 
 export const Footer = () => {
   return (
-    <div className='flex w-full justify-center text-xs bg-gray-800 text-white py-2 absolute'>
+    <div className='flex w-full justify-center text-xs mb-10 bg-gray-800 text-white py-2'>
       <Link
         href='/'
         className={`antialiased font-bold ${titleFonts.className}`}
