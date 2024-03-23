@@ -66,7 +66,7 @@ export const ProductGridItem = ({ products, idx }: ProductProps) => {
               className={cn(
                 'text-zinc-100 mt-4 hover:text-blue-600 duration-300'
               )}
-              href={`product/${products.slug}`}
+              href={`/product/${products.slug}`}
             >
               {products.title}
             </Link>

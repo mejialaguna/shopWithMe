@@ -10,3 +10,4 @@ export * from './product/ProductSlideShow';
 export * from './product/ProductMobileSlideShow';
 export * from './ui/Footer';
 export * from './ui/Pagination';
+export * from './ui/StockLabel';

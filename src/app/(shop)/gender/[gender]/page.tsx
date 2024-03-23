@@ -2,8 +2,8 @@
 import { notFound, redirect } from 'next/navigation';
 import { Pagination, ProductGrid } from '@/components';
 import { Title } from '@/components/ui/Title';
-import { getPaginationProductWithImages } from '@/actions';
 import { Gender } from '@prisma/client';
+import { getPaginationProductWithImages } from '@/actions/product/product-pagination';
 
 export interface PageProps {
   params: {
