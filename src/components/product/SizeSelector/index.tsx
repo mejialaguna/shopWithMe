@@ -1,24 +1,30 @@
 import { Size } from '@/interfaces';
 
 interface SizeProp {
-  selectedSize: Size;
+  selectedSize: Size | undefined;
   availableSizes: Size[];
-  onSizeChanged: React.Dispatch<React.SetStateAction<Size>>;
+  onSizeChanged: React.Dispatch<React.SetStateAction<Size | undefined>>;
   inStock: number;
+  setShowToolTip: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const SizeSelector = ({
-  selectedSize = 'XS',
+  selectedSize,
   availableSizes,
   onSizeChanged,
   inStock,
+  setShowToolTip,
 }: SizeProp) => {
+  const handleSizeChanged = (size: Size) => { 
+    onSizeChanged(size);
+    setShowToolTip(false);
+  }
   return (
     <div className='my-5'>
       <h3 className='font-bold'>Sizes</h3>
       {availableSizes.map((size) => (
         <button
           disabled={inStock === 0}
-          onClick={() => onSizeChanged(size)}
+          onClick={() => handleSizeChanged(size)}
           key={size}
           className={`relative mx-1 hover:underline hover:underline-offset-4 text-lg
           ${size === selectedSize ? 'underline underline-offset-4' : ''} ${
