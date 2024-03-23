@@ -3,10 +3,9 @@ export const revalidate = 604800; // revalidate every 7days
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
+  AddToCart,
   ProductMobileSlideShow,
   ProductSlideShow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from '@/components';
 import { titleFonts } from '@/config/font';
@@ -46,6 +45,8 @@ export default async function ({ params }: PageProps) {
     notFound();
   }
 
+  const disabled = product.inStock === 0
+
   return (
     <div className='mt-5 mb-20 flex flex-col md:grid md:grid-cols-3 gap-3'>
       <div className='col-span-1 md:col-span-2'>
@@ -67,9 +68,14 @@ export default async function ({ params }: PageProps) {
           {product.title}
         </h1>
         <p className='text-lg mb-5'>${product.price}</p>
-        <SizeSelector availableSizes={product.sizes} selectedSize={'M'} />
-        <QuantitySelector quantity={2} />
-        <button className='btn-primary my-5'> add to cart</button>
+        <AddToCart product={product} />
+        <button
+          disabled={disabled}
+          className={` my-5 ${!disabled ? 'btn-primary' : ' btn-secondary'}`}
+        >
+          {' '}
+          add to cart
+        </button>
         <h3 className='font-bold text-sm'>Description</h3>
         <p className='font-light'>{product.description}</p>
       </div>
