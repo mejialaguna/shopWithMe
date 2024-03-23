@@ -2,8 +2,9 @@
 
 import React, { useCallback, useState } from 'react';
 import { QuantitySelector, SizeSelector } from '..';
-import { Product, Size } from '@/interfaces';
+import { CartProduct, Product, Size } from '@/interfaces';
 import { AnimatedTooltip } from '../ui/AnimatedToolTip';
+import { useCartStore } from '@/store/cart/cart-store';
 
 interface AddCartProp {
   product: Product;
@@ -14,13 +15,35 @@ export const AddToCart = ({ product }: AddCartProp) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [showToolTip, setShowToolTip] = useState<boolean>(false);
   const disabled = product.inStock === 0;
+  const addProductToCart = useCartStore((state) => state.addProductToCart);
 
   const addToCart = useCallback(() => {
     if (size === undefined) {
       setShowToolTip(true);
-      return
+      return;
     }
-  }, [size]);
+
+    const selectedProduct: CartProduct = {
+      id: product.id,
+      slug: product.slug,
+      title: product.title,
+      price: product.price,
+      quantity: quantity,
+      size: size,
+      images: product.images[0],
+    };
+
+    addProductToCart(selectedProduct);
+  }, [
+    size,
+    product.id,
+    product.slug,
+    product.title,
+    product.price,
+    product.images,
+    quantity,
+    addProductToCart,
+  ]);
 
   return (
     <>
