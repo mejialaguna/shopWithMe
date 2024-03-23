@@ -1,22 +1,23 @@
 'use server';
 import prisma from '@/lib/prisma';
+import { Gender } from '@prisma/client';
 
 interface PaginationsOptionsProps {
   page?: number;
   take?: number;
+  gender?: Gender;
 }
 
 export const getPaginationProductWithImages = async ({
   page = 1,
   take = 10,
+  gender,
 }: PaginationsOptionsProps) => {
   if (isNaN(Number(page))) page = 1;
   if (page < 0) page = 1;
 
   try {
     const products = await prisma.product.findMany({
-      take: take,
-      skip: (page - 1) * take,
       include: {
         ProductImage: {
           take: 2,
@@ -25,9 +26,17 @@ export const getPaginationProductWithImages = async ({
           },
         },
       },
+      take: take,
+      skip: (page - 1) * take,
+      where: {
+        gender: gender,
+      },
     });
 
-    const productsCount = await prisma.product.count({});
+    const productsCount = await prisma.product.count({
+      where: { gender: gender },
+    });
+
     return {
       currentPage: page,
       productsCount,
@@ -40,10 +49,7 @@ export const getPaginationProductWithImages = async ({
         };
       }),
     };
-
-    
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('somethig went wrong fetching all products', error);
+    throw new Error(`somethig went wrong fetching all products, ${error}`);
   }
 };

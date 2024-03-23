@@ -1,3 +1,4 @@
+export const revalidate = 60; // revalidating or re-caching every 60 seconds
 import { getPaginationProductWithImages } from '@/actions';
 import { Pagination } from '@/components';
 import { ProductGrid } from '@/components/products/product-grid/ProductGrid';

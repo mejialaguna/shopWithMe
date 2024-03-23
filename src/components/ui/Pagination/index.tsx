@@ -32,7 +32,7 @@ export const Pagination = ({
   );
 
   if (currentPage < 1 || isNaN(+currentPageString)) {
-    redirect('/?page=1');
+    redirect(pathName);
   }
 
   const createPageUrl = (pageNumber: number | string) => {
@@ -42,11 +42,11 @@ export const Pagination = ({
       return `${pathName}?${params.toString()}`;
     }
 
-    if (
-      +pageNumber <= 0 ||
-      pageNumber === currentPageString ||
-      +pageNumber > totalPages
-    ) {
+    if (+pageNumber <= 0) {
+      return `${pathName}`;
+    }
+
+    if (+pageNumber > totalPages) {
       return `${pathName}?${params.toString()}`;
     }
 

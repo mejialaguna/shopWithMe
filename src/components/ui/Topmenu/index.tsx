@@ -18,19 +18,19 @@ export const TopMenu = () => {
       <div className='hidden sm:inline-block'>
         <Link
           className='p-2 rounded-md transition-all hover:bg-gray-100'
-          href='/category/men'
+          href='/gender/men'
         >
           Mens
         </Link>
         <Link
           className='p-2 rounded-md transition-all hover:bg-gray-100'
-          href='/category/women'
+          href='/gender/women'
         >
           womens
         </Link>
         <Link
           className='p-2 rounded-md transition-all hover:bg-gray-100'
-          href='/category/kid'
+          href='/gender/kid'
         >
           Kids
         </Link>
