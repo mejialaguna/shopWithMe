@@ -1,5 +1,4 @@
 import { Size } from '@/interfaces';
-
 interface SizeProp {
   selectedSize: Size | undefined;
   availableSizes: Size[];

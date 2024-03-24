@@ -15,7 +15,7 @@ export const AddToCart = ({ product }: AddCartProp) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [showToolTip, setShowToolTip] = useState<boolean>(false);
   const disabled = product.inStock === 0;
-  const addProductToCart = useCartStore((state) => state.addProductToCart);
+  const { addProductToCart, getTotalItems } = useCartStore((state) => state);
 
   const addToCart = useCallback(() => {
     if (size === undefined) {
@@ -34,16 +34,8 @@ export const AddToCart = ({ product }: AddCartProp) => {
     };
 
     addProductToCart(selectedProduct);
-  }, [
-    size,
-    product.id,
-    product.slug,
-    product.title,
-    product.price,
-    product.images,
-    quantity,
-    addProductToCart,
-  ]);
+    getTotalItems()
+  }, [size, product.id, product.slug, product.title, product.price, product.images, quantity, addProductToCart, getTotalItems]);
 
   return (
     <>

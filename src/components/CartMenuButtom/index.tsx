@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { IoCartOutline } from 'react-icons/io5';
 import { useCartStore } from '@/store/cart/cart-store';
 
-export const Buttom = () => {
+export const CartMenuButtom = () => {
   const totalItemsInCart = useCartStore((state) => state.getTotalItems());
   const { openSideMenu } = useUiStore((state) => ({
     openSideMenu: state.openSideMenu,
@@ -17,7 +17,6 @@ export const Buttom = () => {
   useEffect(() => {
     setLoaded(true);
   }, [])
-  
 
   return (
     <>

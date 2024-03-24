@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { IoSearchOutline } from 'react-icons/io5';
 import { titleFonts } from '@/config/font';
-import { Buttom } from '@/components';
+import { CartMenuButtom } from '@/components';
 
 export const TopMenu = () => {
   return (
@@ -39,7 +39,7 @@ export const TopMenu = () => {
         <Link href='/search' className=' p-2 rounded-md hover:bg-gray-100'>
           <IoSearchOutline className='w-5 h-5' />
         </Link>
-        <Buttom />
+        <CartMenuButtom />
       </div>
     </nav>
   );
