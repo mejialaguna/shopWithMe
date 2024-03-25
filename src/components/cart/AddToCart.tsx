@@ -31,11 +31,13 @@ export const AddToCart = ({ product }: AddCartProp) => {
       quantity: quantity,
       size: size,
       images: product.images[0],
+      inStock: product.inStock,
     };
 
     addProductToCart(selectedProduct);
     getTotalItems()
-  }, [size, product.id, product.slug, product.title, product.price, product.images, quantity, addProductToCart, getTotalItems]);
+  }, [size, product.id, product.slug, product.title, product.price,
+    product.images, product.inStock, quantity, addProductToCart, getTotalItems]);
 
   return (
     <>
@@ -49,7 +51,7 @@ export const AddToCart = ({ product }: AddCartProp) => {
       />
       <QuantitySelector
         quantity={quantity}
-        onAddItem={setQuantity}
+        onQuantityChanged={setQuantity}
         inStock={product?.inStock}
       />
       <button
