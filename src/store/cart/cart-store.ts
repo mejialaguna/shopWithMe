@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { CartProduct } from '@/interfaces';
 import { persist } from 'zustand/middleware';
+import { currencyFormatter } from '@/utils/currencyFormatter';
 
 interface State {
   cart: CartProduct[];
@@ -10,8 +11,9 @@ interface State {
   updateProductQuantity: (product: CartProduct, quantity: number) => void;
   removeProduct: (product: CartProduct) => void;
   getSummaryInformation: () => {
-    subtotal: number;
+    subtotal: string;
     total: string;
+    tax: string;
   };
 }
 
@@ -80,10 +82,12 @@ export const useCartStore = create<State>()(
         const subtotal = cart.reduce((accumulator, items) => {
           return items.price * items.quantity + accumulator;
         }, 0);
-        const total = (subtotal * 0.725).toFixed(2); // Apply toFixed here
+        const tax = subtotal * 0.0725;
+        const total = (tax + subtotal);
         return {
-          subtotal,
-          total: Number(total).toFixed(2),
+          subtotal: currencyFormatter(subtotal),
+          total: currencyFormatter(total),
+          tax: currencyFormatter(tax),
         };
       },
     }),
