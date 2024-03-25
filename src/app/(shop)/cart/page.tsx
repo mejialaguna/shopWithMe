@@ -1,12 +1,7 @@
 import Link from 'next/link';
 import { Title } from '@/components/ui/Title';
 import { ProductsInCart } from './ui/ProductsInCart';
-
-// const productsInCart = [
-//   initialData.products[0],
-//   initialData.products[1],
-//   initialData.products[2],
-// ];
+import { ProdustSummary } from './ui/ProdustSummary';
 
 export default function () {
   return (
@@ -26,28 +21,7 @@ export default function () {
             <ProductsInCart />
           </div>
           <div className='bg-white rounded-xl shadow-xl p-7 h-max'>
-            <h2 className='text-2xl mb-2'>Order View</h2>
-            <div className='grid grid-cols-2'>
-              <span className=''>No. Products</span>
-              <span className='text-right'> 3 Items</span>
-
-              <span className=''>Subtotal</span>
-              <span className='text-right'>$100</span>
-
-              <span className=''>Tax.</span>
-              <span className='text-right'> 7.25%</span>
-
-              <span className='mt-5 text-2xl'>Total</span>
-              <span className='text-right mt-5 text-2xl'>$100</span>
-            </div>
-            <div className=''>
-              <Link
-                href='/checkout/address'
-                className='flex justify-center mt-5 mb-2 btn-primary w-full'
-              >
-                Checkout
-              </Link>
-            </div>
+            <ProdustSummary />
           </div>
         </div>
       </div>

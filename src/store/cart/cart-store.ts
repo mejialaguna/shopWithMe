@@ -8,6 +8,11 @@ interface State {
   addProductToCart: (product: CartProduct) => void;
   getTotalItems: () => number;
   updateProductQuantity: (product: CartProduct, quantity: number) => void;
+  removeProduct: (product: CartProduct) => void;
+  getSummaryInformation: () => {
+    subtotal: number;
+    total: string;
+  };
 }
 
 export const useCartStore = create<State>()(
@@ -62,6 +67,24 @@ export const useCartStore = create<State>()(
           return item;
         });
         set({ cart: updatedCartProduct });
+      },
+      removeProduct: (product: CartProduct) => {
+        const { cart } = get();
+        const updatedCartProducts = cart.filter((item) => {
+          return !(item.id === product.id && item.size === product.size);
+        });
+        set({ cart: updatedCartProducts });
+      },
+      getSummaryInformation: () => {
+        const { cart } = get();
+        const subtotal = cart.reduce((accumulator, items) => {
+          return items.price * items.quantity + accumulator;
+        }, 0);
+        const total = (subtotal * 0.725).toFixed(2); // Apply toFixed here
+        return {
+          subtotal,
+          total: Number(total).toFixed(2),
+        };
       },
     }),
     {

@@ -11,17 +11,17 @@ import Link from 'next/link';
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
   const productsInCart: CartProduct[] = useCartStore((state) => state.cart);
-  const updateProductQuantity = useCartStore(
-    (state) => state.updateProductQuantity
+  const {updateProductQuantity, removeProduct} = useCartStore(
+    (state) => state
   );
 
   useEffect(() => {
     setLoaded(true);
   }, []);
 
-  // if (!productsInCart.length) {
-  //   redirect('/empty');
-  // }
+  if (!productsInCart.length) {
+    redirect('/empty');
+  }
 
   return (
     loaded &&
@@ -50,7 +50,12 @@ export const ProductsInCart = () => {
             }
             inStock={product.inStock}
           />
-          <button className='underline underline-offset-4'>Remove</button>
+          <button
+            onClick={() => removeProduct(product)}
+            className='underline underline-offset-4'
+          >
+            Remove
+          </button>
         </div>
       </div>
     ))
