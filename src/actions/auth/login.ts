@@ -17,13 +17,31 @@ export async function authenticate(
       redirect: false,
     });
 
-    return { success: true};
+    return { success: true };
+
   } catch (error) {
-    // console.log(error);
     return {
       success: false,
       message: 'Wrong email or password',
     };
   }
 }
-// johndoe@aol.com
+
+export async function login(
+  email: string,
+  password: string
+): Promise<AuthenticationResult> {
+  try {
+    await signIn('credentials', {
+      email: email.toLowerCase(),
+      password,
+    });
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Wrong email or password',
+    };
+  }
+}

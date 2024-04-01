@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/actions/auth/login';
