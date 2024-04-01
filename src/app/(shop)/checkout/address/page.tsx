@@ -25,7 +25,7 @@ export default function NamePage() {
           </div>
 
           <div className='flex flex-col mb-2'>
-            <span>Address 2 (opcional)</span>
+            <span>Address 2 (optional)</span>
             <input type='text' className='p-2 border rounded-md bg-gray-200' />
           </div>
 
@@ -48,7 +48,7 @@ export default function NamePage() {
           </div>
 
           <div className='flex flex-col mb-2'>
-            <span>Teléfono</span>
+            <span>Phone</span>
             <input type='text' className='p-2 border rounded-md bg-gray-200' />
           </div>
 
@@ -57,7 +57,7 @@ export default function NamePage() {
               href='/checkout'
               className='btn-primary flex w-full sm:w-1/2 justify-center '
             >
-              Siguiente
+              Next
             </Link>
           </div>
         </div>

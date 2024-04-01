@@ -12,3 +12,4 @@ export * from './ui/Footer';
 export * from './ui/Pagination';
 export * from './ui/StockLabel';
 export * from './cart/AddToCart';
+export * from './provider/Provider'
