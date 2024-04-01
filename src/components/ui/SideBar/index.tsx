@@ -5,15 +5,14 @@ import {
   IoCloseOutline,
   IoLogInOutline,
   IoLogOutOutline,
-  IoPeopleOutline,
   IoPersonOutline,
   IoSearchOutline,
-  IoShirtOutline,
   IoTicketOutline,
 } from 'react-icons/io5';
 import { useUiStore } from '@/store/ui/ui-store';
 import { logout } from '@/actions/auth/logout';
 import { useSession } from 'next-auth/react';
+import { AdminMenu } from '../AdminMenu';
 
 export const SideBar = () => {
   const { isSideMenuOpen, closeSideMenu } = useUiStore((state) => ({
@@ -23,6 +22,7 @@ export const SideBar = () => {
   }));
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user.role === 'admin';
 
   const signOut = () => {
     logout();
@@ -59,21 +59,26 @@ export const SideBar = () => {
           />
         </div>
 
-        <Link
-          href='/profile'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all'
-          onClick={closeSideMenu}
-        >
-          <IoPersonOutline size={20} />
-          <span className='ml-3 text-l'>Profile</span>
-        </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoTicketOutline size={20} />
-          <span className='ml-3 text-l'>Orders</span>
-        </Link>
+        {isAuthenticated && (
+          <>
+            <Link
+              href='/profile'
+              className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all'
+              onClick={closeSideMenu}
+            >
+              <IoPersonOutline size={20} />
+              <span className='ml-3 text-l'>Profile</span>
+            </Link>
+            <Link
+              href='/'
+              className='flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all '
+            >
+              <IoTicketOutline size={20} />
+              <span className='ml-3 text-l'>Orders</span>
+            </Link>
+          </>
+        )}
+
         {isAuthenticated && (
           <button
             className='flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all w-full'
@@ -83,9 +88,10 @@ export const SideBar = () => {
             <span className='ml-3 text-l'>Logout</span>
           </button>
         )}
+
         {!isAuthenticated && (
           <Link
-            href='/auth/login'
+            href='/login'
             className='flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all'
             onClick={closeSideMenu}
           >
@@ -96,28 +102,7 @@ export const SideBar = () => {
 
         <hr className='w-full h-px bg-gray-200 my-10' />
 
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoShirtOutline size={20} />
-          <span className='ml-3 text-l'>Products</span>
-        </Link>
-
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoTicketOutline size={20} />
-          <span className='ml-3 text-l'>Orders</span>
-        </Link>
-        <Link
-          href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all '
-        >
-          <IoPeopleOutline size={20} />
-          <span className='ml-3 text-l'>Users</span>
-        </Link>
+        {isAuthenticated && isAdmin && <AdminMenu />}
       </nav>
     </div>
   );

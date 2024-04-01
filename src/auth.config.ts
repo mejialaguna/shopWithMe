@@ -6,17 +6,19 @@ import bcryptjs from 'bcryptjs';
 
 export const authConfig: NextAuthConfig = {
   pages: {
-    signIn: '/auth/login',
-    newUser: '/auth/signup',
+    signIn: '/login',
+    newUser: '/signup',
   },
   callbacks: {
     jwt({ token, user }) {
       if (user) {
         token.data = user;
       }
+      // console.log({token, user });
       return token;
     },
-    session({ session, token }) {
+    session({ session, token, user }) {
+      console.log({ session, token, user });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session.user = token.data as any;
       return session;
