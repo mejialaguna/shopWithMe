@@ -93,7 +93,7 @@ export const RegisterForm = () => {
       <div
         className={`flex flex-row justify-between px-5 py-2
         bg-gray-200 rounded items-center ${outline && 'border-2 border-[#115FCC]'}
-         ${!!errors?.password?.type ? 'mb-3 border-red-600 ' : 'mb-5'}`}
+         ${errors?.password?.type ? 'mb-3 border-red-600 ' : 'mb-5'}`}
       >
         <input
           className='bg-gray-200 outline-none w-full'
@@ -121,7 +121,6 @@ export const RegisterForm = () => {
 
       <button className='btn-primary'>Sign up</button>
 
-      {/* divisor line */}
       <div className='flex items-center my-5'>
         <div className='flex-1 border-t border-gray-500'></div>
         <div className='px-2 text-gray-800'>Or</div>

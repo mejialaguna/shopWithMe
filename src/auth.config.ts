@@ -17,6 +17,7 @@ export const authConfig: NextAuthConfig = {
       // console.log({token, user });
       return token;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     session({ session, token, user }) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session.user = token.data as any;

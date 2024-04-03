@@ -29,6 +29,11 @@ enum Role {
   user
 }
 
+model Countries {
+  id   String @id
+  name String
+}
+
 model Category {
   id   String @id @default(uuid())
   name String @unique

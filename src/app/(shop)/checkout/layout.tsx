@@ -1,5 +1,5 @@
-import { auth } from "@/auth.config";
-import { redirect } from "next/navigation";
+import { auth } from '@/auth.config';
+import { redirect } from 'next/navigation';
 
 export default async function CheckoutLayout({
  children
