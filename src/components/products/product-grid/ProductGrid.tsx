@@ -6,7 +6,9 @@ interface ProductProps {
 
 export const ProductGrid = ({ products }: ProductProps) => {
   return (
-    <div className={'flex flex-row flex-wrap justify-center pb-10'}>
+    <div
+      className={'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4'}
+    >
       {products?.map((item, idx) => {
         return <ProductGridItem key={item.slug} products={item} idx={idx} />;
       })}

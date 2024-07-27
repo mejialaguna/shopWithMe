@@ -5,49 +5,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/interfaces';
 import { cn } from '@/utils/cn';
-import { AnimatePresence, motion } from 'framer-motion';
 
 interface ProductProps {
   products: Product;
   idx:number;
 }
 
-export const ProductGridItem = ({ products, idx }: ProductProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+export const ProductGridItem = ({ products }: ProductProps) => {
+  const [hoveredIndex, setHoveredIndex] = useState<boolean>(false);
   const [showImage, setShowImage] = useState(products.images[0])
 
-  const setHoverIndex = useCallback((value: number | null) => {
+  const setHoverIndex = useCallback((value: boolean) => {
       setHoveredIndex(value);
     }, [], )
 
   return (
     <div
       className='relative group block p-2 fade-in'
-      onMouseEnter={() => setHoverIndex(idx)}
-      onMouseLeave={() => setHoverIndex(null)}
+      onMouseEnter={() => setHoverIndex(true)}
+      onMouseLeave={() => setHoverIndex(false)}
     >
-      <AnimatePresence>
-        {hoveredIndex === idx && (
-          <motion.span
-            className='absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block rounded-3xl'
-            layoutId='hoverBackground'
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-              transition: { duration: 0.15 },
-            }}
-            exit={{
-              opacity: 0,
-              transition: { duration: 0.15, delay: 0.2 },
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {hoveredIndex && (
+        <div className='fade-in absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block rounded-3xl' />
+      )}
       <div
         className={cn(
           `rounded-2xl overflow-hidden bg-black border opacity-80
           border-transparent dark:border-white/[0.2] transition-all
-          duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20`
+          duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20 h-[19.9rem] md:h-[20rem] lg:h-[23.5rem]`
         )}
       >
         <div className='relative z-50'>
