@@ -57,7 +57,7 @@ export const Pagination = ({
   const allPages = generatePaginationNumber(currentPage, totalPages);
 
   return (
-    <div className='flex items-center justify-between px-4 py-3 sm:px-6'>
+    <div className='flex items-center justify-between px-4 py-3 sm:px-6 mb-8'>
       <div className='hidden sm:flex sm:flex-1 sm:items-center sm:justify-between'>
         <div>
           <p className='text-sm text-gray-700'>

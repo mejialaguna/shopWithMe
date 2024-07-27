@@ -8,7 +8,7 @@ export const getProductBySlug = async (slug: string) => {
         ProductImage: {
           select: {
             url: true,
-          },
+          },  
         },
       },
       where: {

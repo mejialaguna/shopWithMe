@@ -21,6 +21,7 @@ export const useCartStore = create<State>()(
   persist(
     // get method allowed me to get the current state from store
     (set, get) => ({
+      // starting the state
       cart: [],
       addProductToCart: (product: CartProduct) => {
         const { cart } = get();

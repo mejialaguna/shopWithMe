@@ -1,9 +1,14 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { setUserAddress, deleteUserAddress } from '@/actions/saveAddress/save-address';
+import { useAddressStore } from '@/store/address/address-store';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormInputs = {
-  name: string;
+  firstName: string;
   lastName: string;
   address: string;
   address2?: string;
@@ -11,7 +16,7 @@ type FormInputs = {
   city: string;
   country: string;
   phone: string;
-  remenberAdress: string;
+  remenberAddress: string;
 };
 
 interface Country {
@@ -24,14 +29,37 @@ interface AddressFormProps {
 }
 
 export const AddressForm = ({ countries }: AddressFormProps) => {
+  const router = useRouter();
+  const isRememberAddressRequire = useMemo(
+    () => window.localStorage.getItem('remenberAddress') || '',
+    []
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormInputs>();
+    reset,
+  } = useForm<FormInputs>({ defaultValues: { remenberAddress: isRememberAddressRequire } });
+
+  const { setAdress, address } = useAddressStore((state) => state);
+  const { data: session } = useSession({
+    required: true
+  });
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log({ ...data });
+    const { remenberAddress, ...rest } = data;
+    setAdress(rest);
+
+    if (remenberAddress) {
+      window.localStorage.setItem('remenberAddress', 'true');
+      await setUserAddress(rest, session!.user?.id);
+    } else {
+      window.localStorage.removeItem('remenberAddress');
+      await deleteUserAddress(session!.user?.id);
+    }
+
+    router.push('/checkout');
   };
 
   const showErrorMessage = (value: keyof FormInputs) => {
@@ -46,6 +74,13 @@ export const AddressForm = ({ countries }: AddressFormProps) => {
     return error ? 'outline-red-600' : '';
   };
 
+  useEffect(() => {
+    if (address.firstName) {
+      // reset function will reset the form fields, the data should have the same values as the form fields
+      reset(address);
+    }
+  }, [address]);
+
   return (
     <form
       className='grid grid-cols-1 gap-x-2 sm:gap-x-5 sm:grid-cols-2'
@@ -55,11 +90,15 @@ export const AddressForm = ({ countries }: AddressFormProps) => {
         <span>First Name</span>
         <input
           type='text'
-          className={`p-2 border rounded-md bg-gray-200 ${!!errors['name'] && changeBorderOnError('name')}`}
+          className={`p-2 border rounded-md bg-gray-200 ${!!errors['firstName'] && changeBorderOnError('firstName')}`}
           autoFocus
-          {...register('name', { required: 'Name is required' })}
+          {...register('firstName', { required: 'Name is required' })}
         />
-        {errors['name'] ? showErrorMessage('name') : <div className='mb-3' />}
+        {errors['firstName'] ? (
+          showErrorMessage('firstName')
+        ) : (
+          <div className='mb-3' />
+        )}
       </div>
 
       <div className='flex flex-col'>
@@ -141,7 +180,7 @@ export const AddressForm = ({ countries }: AddressFormProps) => {
         >
           <option value=''>Select</option>
           {countries.map((country) => (
-            <option key={country.id} value={country.name}>
+            <option key={country.id} value={country.id}>
               {country.name}
             </option>
           ))}
@@ -167,9 +206,8 @@ export const AddressForm = ({ countries }: AddressFormProps) => {
         <label className='inline-flex items-center mb-5 cursor-pointer'>
           <input
             type='checkbox'
-            value=''
             className='sr-only peer'
-            {...register('remenberAdress')}
+            {...register('remenberAddress')}
           />
           <div
             className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none
@@ -181,7 +219,7 @@ export const AddressForm = ({ countries }: AddressFormProps) => {
           after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           />
           <span className='ms-3 text-sm font-medium text-gray-900 dark:text-gray-700'>
-            Remenber delivery address
+            Remember delivery address
           </span>
         </label>
 

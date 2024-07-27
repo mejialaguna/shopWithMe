@@ -29,9 +29,28 @@ enum Role {
   user
 }
 
-model Countries {
-  id   String @id
-  name String
+model Country {
+  id          String        @id
+  name        String
+  UserAddress UserAddress[]
+}
+
+model UserAddress {
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  address   String
+  address2  String?
+  zipcode   String
+  phone     String
+  city      String
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  // relation one to one
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Category {
@@ -82,4 +101,7 @@ model User {
   password      String
   role          Role      @default(user)
   image         String?
+
+  // relation one to one
+  address UserAddress?
 }
