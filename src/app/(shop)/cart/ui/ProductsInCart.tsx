@@ -10,16 +10,25 @@ import Link from 'next/link';
 
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
+  const [isShoppingcartEmpty, setIsShoppingcartEmpty] = useState(false);
   const productsInCart: CartProduct[] = useCartStore((state) => state.cart);
   const {updateProductQuantity, removeProduct} = useCartStore(
     (state) => state
   );
 
   useEffect(() => {
+    const shoppingCartString =
+      window.localStorage.getItem('shoppingCart') || null;
+    setIsShoppingcartEmpty(
+      !(
+        shoppingCartString &&
+        JSON.parse(shoppingCartString)?.state?.cart?.length
+      )
+    );
     setLoaded(true);
   }, []);
 
-  if (!productsInCart.length) {
+  if (!productsInCart.length && isShoppingcartEmpty) {
     redirect('/empty');
   }
 

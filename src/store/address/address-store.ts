@@ -34,7 +34,7 @@ export const useAddressStore = create<State>()(
         if (address) {
           set({ address });
         }
-      },
+      }
     }),
     { name: 'deliveryAddress' }
   )
