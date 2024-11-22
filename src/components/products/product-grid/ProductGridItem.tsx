@@ -32,7 +32,7 @@ export const ProductGridItem = ({ products }: ProductProps) => {
         className={cn(
           `rounded-2xl overflow-hidden bg-black border opacity-80
           border-transparent dark:border-white/[0.2] transition-all
-          duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20 h-[19.9rem] md:h-[20rem] lg:h-[23.5rem]`
+          duration-1000 group-hover:border-slate-700 group-hover:opacity-100 relative z-20 h-auto md:h-[20rem] xl:h-auto`
         )}
       >
         <div className='relative z-50'>

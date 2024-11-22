@@ -15,6 +15,7 @@ interface State {
     total: string;
     tax: string;
   };
+  clearCart: () => void;
 }
 
 export const useCartStore = create<State>()(
@@ -84,12 +85,15 @@ export const useCartStore = create<State>()(
           return items.price * items.quantity + accumulator;
         }, 0);
         const tax = subtotal * 0.0725;
-        const total = (tax + subtotal);
+        const total = tax + subtotal;
         return {
           subtotal: currencyFormatter(subtotal),
           total: currencyFormatter(total),
           tax: currencyFormatter(tax),
         };
+      },
+      clearCart:  () => {
+        set({ cart: [] });
       },
     }),
     {

@@ -1,18 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use server';
 
+import { Address } from '@/interfaces/address.interfaces';
 import prisma from '@/lib/prisma';
-
-interface Address {
-  firstName: string;
-  lastName: string;
-  address: string;
-  address2?: string;
-  zipcode: string;
-  country: string;
-  phone: string;
-  city:string;
-}
 
 export const setUserAddress = async (address: Address, userId: string) => {
   try {

@@ -30,9 +30,10 @@ enum Role {
 }
 
 model Country {
-  id          String        @id
-  name        String
-  UserAddress UserAddress[]
+  id           String         @id
+  name         String
+  UserAddress  UserAddress[]
+  orderAddress orderAddress[]
 }
 
 model UserAddress {
@@ -79,6 +80,8 @@ model Product {
 
   // ** relationship with the between Product and ProductImage table
   ProductImage ProductImage[]
+  // ** relationship with the between Product and orderItems table
+  orderItems   orderItems[]
 
   // ** with this index, i can look up all of the products of men, kid, women or unisex.
   @@index([gender])
@@ -104,4 +107,55 @@ model User {
 
   // relation one to one
   address UserAddress?
+  Order   Order[]
+}
+
+model Order {
+  id           String    @id @default(uuid())
+  subtotal     Float
+  tax          Float
+  total        Float
+  itemsInOrder Int
+  IsPaid       Boolean @default(false)
+  paidAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ** relationship with between this table and user table
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+
+  orderItems   orderItems[]
+  orderAddress orderAddress?
+}
+
+model orderItems {
+  id        String @id @default(uuid())
+  quantity  Int
+  price     Float
+  size      Size
+
+  orderId   String
+  order   Order   @relation(fields: [orderId], references: [id])
+
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model orderAddress {
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  address   String
+  address2  String?
+  zipcode   String
+  phone     String
+  city      String
+
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String @unique
 }
