@@ -84,7 +84,7 @@ export const useCartStore = create<State>()(
         const subtotal = cart.reduce((accumulator, items) => {
           return items.price * items.quantity + accumulator;
         }, 0);
-        const tax = subtotal * 0.0725;
+        const tax = subtotal * 0.0625;
         const total = tax + subtotal;
         return {
           subtotal: currencyFormatter(subtotal),

@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Title } from '@/components/ui/Title';
 import { IoCardOutline } from 'react-icons/io5';
-import { useState } from 'react';
 import { getOrderById } from '@/actions/order/get-order-by-id';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { OrderItem, ProductOrderDetail } from '@/interfaces/product.orderDetail';
 import Badge from '@/components/Badge';
+import { PayPalButton } from '@/components';
 
 interface OrdersProp {
   params: {
@@ -67,6 +67,10 @@ export default function ({ params }: OrdersProp) {
     );
   }
 
+  if (!productOrderDetail) {
+    return null;
+  }
+  console.log('productOrderDetail', productOrderDetail);
   return (
     <div className='flex justify-center items-center px-10 sm:px-0'>
       <div className='flex flex-col w-[1000px] mb-8 sm:mb-0'>
@@ -126,26 +130,32 @@ export default function ({ params }: OrdersProp) {
             <div className='grid grid-cols-2'>
               <span className=''>No. Products</span>
               <span className='text-right'>
-                {' '}
                 {productOrderDetail?.itemsInOrder} Items
               </span>
 
               <span className=''>Subtotal</span>
               <span className='text-right'>
-                ${productOrderDetail?.subtotal}
+                {currencyFormatter(productOrderDetail?.subtotal || 0)}
               </span>
 
               <span className=''>Tax.</span>
-              <span className='text-right'> {productOrderDetail?.tax}%</span>
+              <span className='text-right'>
+                {`${currencyFormatter(productOrderDetail?.tax || 0)} (6.625%)`}{' '}
+              </span>
 
               <span className='mt-5 text-2xl'>Total</span>
               <span className='text-right mt-5 text-2xl'>
-                ${productOrderDetail?.total}
+                {currencyFormatter(productOrderDetail?.total || 0)}
               </span>
             </div>
-            <Badge isPaid={productOrderDetail?.IsPaid}>
-              <IoCardOutline size={20} />
-            </Badge>
+            {!productOrderDetail?.IsPaid && (
+              <div className='mt-3'>
+                <PayPalButton
+                  amount={productOrderDetail!.total}
+                  orderId={productOrderDetail!.id}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

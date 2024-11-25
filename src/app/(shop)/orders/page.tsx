@@ -48,7 +48,7 @@ export default async function () {
             </tr>
           </thead>
           <tbody>
-            {userOrders?.map((order, idx) => {
+            {userOrders?.map((order) => {
               return (
                 <tr
                   key={order?.id}
@@ -62,7 +62,8 @@ export default async function () {
                   </td>
                   <td className='flex items-center text-sm  text-gray-900 font-light px-6 py-4 whitespace-nowrap'>
                     <IoCardOutline className={`${!order?.IsPaid ? 'text-red-400' : 'text-green-800'}`} />
-                    <span className={`mx-2 ${!order?.IsPaid ? 'text-red-400' : 'text-green-800'}`}>{order?.IsPaid ? 'Paid' : 'Pending'}</span>
+                    <span className={`mx-2 ${!order?.IsPaid ? 'text-red-400' : 'text-green-800'}`}>
+                      {order?.IsPaid ? 'Paid' : 'Pending'}</span>
                   </td>
                   <td className='text-sm text-gray-900 font-light px-6 '>
                     <Link

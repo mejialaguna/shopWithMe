@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 
 export const getOrdersByUser = async () => {
   const session = await auth();
-  const userId = session?.user.id;
+  const userId = session?.user?.id;
 
   if (!userId) {
     return {
