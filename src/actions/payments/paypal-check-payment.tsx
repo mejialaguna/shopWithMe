@@ -1,10 +1,10 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { PayPalOrderStatusResponse } from '@/interfaces/paypal.interface';
+import { revalidatePath } from 'next/cache';
 
-export const paypalCheckPayment = async (paypalTransactionId: string, orderId: string) => {
+export const paypalCheckPayment = async (paypalTransactionId: string) => {
   const authToken = await getPayPalBearerToken();
 
   if (!authToken) {
@@ -24,16 +24,15 @@ export const paypalCheckPayment = async (paypalTransactionId: string, orderId: s
   }
 
   const { status, purchase_units } = resp;
-  console.log({ status, purchase_units });
-  // console.log('==========>', purchase_units[0]);
-  // const { invoice_id: orderId } = purchase_units[0];
+
+  const { invoice_id: orderId } = purchase_units[0];
   if (status !== 'COMPLETED') {
     return {
       ok: false,
       message: 'Order still pending.',
     };
   }
-  console.log('orderId==========>', orderId)
+
   try {
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
@@ -42,9 +41,8 @@ export const paypalCheckPayment = async (paypalTransactionId: string, orderId: s
         paidAt: new Date(),
       },
     });
-    
-    console.log('updatedOrder', updatedOrder);
 
+    // since this is a server action, the revalidate function only works inside server action.
     revalidatePath(`/orders/${orderId}`);
 
     return {
@@ -53,7 +51,6 @@ export const paypalCheckPayment = async (paypalTransactionId: string, orderId: s
 
     
   } catch (error) {
-    console.log(error);
     return {
       ok: false,
       message: '500 - cant proccess the payment'
@@ -92,7 +89,6 @@ const getPayPalBearerToken = async (): Promise<string | null> => {
     }).then((r) => r.json());
     return result.access_token;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
@@ -124,7 +120,6 @@ const verifyPayPalPayment = async (
     return resp;
 
   } catch (error) {
-    console.log(error);
     return null;
   }
 

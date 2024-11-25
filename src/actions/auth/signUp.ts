@@ -33,15 +33,11 @@ export const signUpUser = async (
       },
     });
 
-    console.log({ user });
-
     return {
       ok: true,
       user: user,
     };
-
   } catch (error) {
-    console.log(error);
     return {
       ok: false,
       message: 'something went wrong creating user',

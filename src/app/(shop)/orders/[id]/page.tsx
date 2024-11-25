@@ -1,6 +1,3 @@
-'use client';
-
-import { useState, useEffect, useCallback } from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Title } from '@/components/ui/Title';
@@ -17,39 +14,18 @@ interface OrdersProp {
   };
 }
 
-export default function ({ params }: OrdersProp) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isPaid, setIsPaid] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [productOrderDetail, setProductOrderDetail] = useState<ProductOrderDetail | undefined>(undefined);
+export default async function ({ params }: OrdersProp) {
   const { id } = params;
 
-  useEffect(() => {
-    setIsLoading(true)
-  }, []);
+   const { ok, productOrder: productOrderDetail } = await getOrderById(id);
 
-  const getProductsOrder = useCallback(async() => {
-    try {
-      const { ok, productOrder } = await getOrderById(id);
+   if (!ok) {
+     redirect('/');
+   }
 
-      if (!ok) {
-        setIsLoading(false);
-        redirect('/');
-      }
+   const address = productOrderDetail!.orderAddress;
 
-      setProductOrderDetail(productOrder);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to fetch products order:', error);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    getProductsOrder();
-  }, [getProductsOrder]);
-
-  if (!isLoading) {
+  if (!address) {
     return (
       <div className='animate-pulse flex space-x-4'>
         <div className='rounded-full bg-slate-700 h-10 w-10'></div>
@@ -67,10 +43,6 @@ export default function ({ params }: OrdersProp) {
     );
   }
 
-  if (!productOrderDetail) {
-    return null;
-  }
-  console.log('productOrderDetail', productOrderDetail);
   return (
     <div className='flex justify-center items-center px-10 sm:px-0'>
       <div className='flex flex-col w-[1000px] mb-8 sm:mb-0'>

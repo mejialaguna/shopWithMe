@@ -14,7 +14,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.data = user;
       }
-      // console.log({token, user });
+
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

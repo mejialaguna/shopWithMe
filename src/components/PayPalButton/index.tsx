@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions } from '@paypal/paypal-js';
 import { setTransactionId } from '@/actions/payments/setTransactionId';
@@ -44,7 +44,7 @@ export const PayPalButton = ({ orderId, amount }: PayPalButtonProps) => {
       const transactionId = await actions.order.create({
         purchase_units: [
           {
-            // invoice_id: orderId,
+            invoice_id: orderId,
             amount: {
               currency_code: 'USD',
               value: amount.toFixed(2),
@@ -81,7 +81,7 @@ export const PayPalButton = ({ orderId, amount }: PayPalButtonProps) => {
 
     if (!details || !details.id) return;
 
-    await paypalCheckPayment(details!.id, orderId);
+    await paypalCheckPayment(details!.id);
   };
 
   return <PayPalButtons createOrder={createOrder} onApprove={onApprove} />;

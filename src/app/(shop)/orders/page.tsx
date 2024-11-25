@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { IoCardOutline } from 'react-icons/io5';
 import { redirect } from 'next/navigation';
 
-export default async function () {
+export default async function OrdersPage() {
   const { ok, userOrders } = await getOrdersByUser();
 
   if (!ok) {
-    redirect('/');
+    redirect('/auth/login');
   }
 
   return (

@@ -55,13 +55,10 @@ async function main() {
     });
 
     // ?? using createMany because the images map contains an array of more than one object.
-    const dbImage = await prisma.productImage.createMany({
+    await prisma.productImage.createMany({
       data: images.map((image) => ({ url: image, productId: dbProduct.id })),
     });
-    console.log('====>', dbImage);
   });
-
-  console.log('done uploading the seeds');
 }
 
 (() => {

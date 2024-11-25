@@ -7,7 +7,7 @@ import prisma from '@/lib/prisma';
 export const setUserAddress = async (address: Address, userId: string) => {
   try {
     // const user = await prisma.user.findUnique({ where: { id: userId } });
-    // console.log({user}, {userId})
+
     const createdAddress = await createOrReplaceAddress(address, userId);
     return {
       success: createdAddress?.success,
