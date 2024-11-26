@@ -84,5 +84,11 @@ export const PayPalButton = ({ orderId, amount }: PayPalButtonProps) => {
     await paypalCheckPayment(details!.id);
   };
 
-  return <PayPalButtons createOrder={createOrder} onApprove={onApprove} />;
+  return (
+    <PayPalButtons
+      createOrder={createOrder}
+      onApprove={onApprove}
+      style={{ color: 'blue', shape: 'pill', label: 'pay' }}
+    />
+  );
 };

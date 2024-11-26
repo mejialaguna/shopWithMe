@@ -1,7 +1,12 @@
-export default function () {
-  return (
-    <div>
-      <h1>Admin Page</h1>
-    </div>
-  );
+import { auth } from '@/auth.config';
+import { redirect } from 'next/navigation';
+
+export default async function AdminPage() {
+  const session = await auth();
+
+  if (session?.user.role !== 'admin') {
+    redirect('/login');
+  }
+
+  redirect('/admin/users');
 }

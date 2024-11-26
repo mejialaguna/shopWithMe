@@ -4,7 +4,7 @@ import { Title } from '@/components/ui/Title';
 import { IoCardOutline } from 'react-icons/io5';
 import { getOrderById } from '@/actions/order/get-order-by-id';
 import { currencyFormatter } from '@/utils/currencyFormatter';
-import { OrderItem, ProductOrderDetail } from '@/interfaces/product.orderDetail';
+import { OrderItem } from '@/interfaces/product.orderDetail';
 import Badge from '@/components/Badge';
 import { PayPalButton } from '@/components';
 
@@ -96,7 +96,7 @@ export default async function ({ params }: OrdersProp) {
               <p>{productOrderDetail?.orderAddress?.phone}</p>
             </div>
 
-            <hr className='w-full h-px bg-gray-200 mt-5 mb-10' />
+            <hr className='w-full h-px bg-gray-200 mt-5 mb-10 z-10' />
 
             <h2 className='text-2xl mb-2'>Order View</h2>
             <div className='grid grid-cols-2'>

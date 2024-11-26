@@ -15,14 +15,7 @@ const initialOptions = {
 
 export const Providers = ({ children }: SessionProviderProps) => {
   return (
-    <PayPalScriptProvider
-      options={{
-        clientId: process?.env?.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? '',
-        intent: 'capture',
-        currency: 'USD',
-      }}
-      // deferLoading={true}
-    >
+    <PayPalScriptProvider options={{ ...initialOptions }}>
       <SessionProvider>{children}</SessionProvider>
     </PayPalScriptProvider>
   );

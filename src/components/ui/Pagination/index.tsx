@@ -36,7 +36,7 @@ export const Pagination = ({
   }
 
   const createPageUrl = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
     if (pageNumber === '...') {
       return `${pathName}?${params.toString()}`;
