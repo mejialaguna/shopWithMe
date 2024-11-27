@@ -1,7 +1,13 @@
+/* eslint-disable max-len */
+'use client';
+
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { ProductTypeSelector } from '@/components/ProductTypeSelector';
+import { useForm } from 'react-hook-form';
+import { HiOutlinePhoto } from 'react-icons/hi2';
 import { Product } from '@/interfaces';
 import { Category } from '@prisma/client';
-import { HiOutlinePhoto } from 'react-icons/hi2';
+import { Alert } from '@/components/Alert';
 
 interface Props {
   products: Product;
@@ -26,16 +32,54 @@ const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const gendersTypes= ['Men', 'Women', 'Kid', 'Unisex'];
 
 export const ProductForm = ({ products, categories }: Props) => {
+  const [alertMessage, setAlertMessage] = useState<string | undefined>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const {
+    handleSubmit,
+    register,
+    formState: { isValid, errors },
+    // getValues,
+    // setValue,
+    watch,
+  } = useForm<FormInputs>({
+    defaultValues: {
+      ...products,
+      tags: products.tags?.join(', '),
+      sizes: products.sizes ?? [],
+
+
+    },
+  });
+  const watchedErrors = watch();
+  const onSubmit = useCallback(async (data: FormInputs) => {
+    console.log(data)
+  }, []);
+
+  const handleAlert = useCallback(() => {
+    const firstErrorKey = (Object.keys(watchedErrors) as (keyof FormInputs)[]).find((key) => !watchedErrors[key]);
+    
+    if (firstErrorKey) {
+      setAlertMessage(`"${firstErrorKey.toUpperCase()}" field is required.`);
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+    }
+  }, [watchedErrors]);
 
   return (
-    <form className='grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3'>
-      {/* Textos */}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3'
+    >
       <div className='w-full'>
         <div className='flex flex-col mb-2'>
-          <span>Título</span>
+          <span>Title</span>
           <input
             type='text'
-            className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            className={`p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6 px-3 ${errors['title'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
+            {...register('title', { required: true })}
           />
         </div>
 
@@ -43,7 +87,8 @@ export const ProductForm = ({ products, categories }: Props) => {
           <span>Slug</span>
           <input
             type='text'
-            className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            className={`p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6 px-3 ${errors['slug'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
+            {...register('slug', { required: true })}
           />
         </div>
 
@@ -53,7 +98,8 @@ export const ProductForm = ({ products, categories }: Props) => {
           </span>
           <textarea
             rows={5}
-            className='block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            className={`block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6 px-3 ${errors['description'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
+            {...register('description', { required: true })}
           />
         </div>
 
@@ -61,7 +107,8 @@ export const ProductForm = ({ products, categories }: Props) => {
           <span>Price</span>
           <input
             type='number'
-            className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            className={`p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm/6 px-3 ${errors['price'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
+            {...register('price', { required: true, min: 0 })}
           />
         </div>
 
@@ -69,18 +116,34 @@ export const ProductForm = ({ products, categories }: Props) => {
           <span>Tags</span>
           <input
             type='text'
-            className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            className={`p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm/6 px-3 ${errors['tags'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
+            {...register('tags', { required: true })}
           />
         </div>
         <div className='flex flex-col mb-2'>
           <span>Gender</span>
-          <ProductTypeSelector categories={gendersTypes} />
+          <ProductTypeSelector
+            options={gendersTypes.map((gender) => ({
+              id: gender.toLowerCase(),
+              name: gender,
+            }))}
+            registerProps={register('gender', { required: true })}
+            errors={errors}
+            name='gender'
+          />
         </div>
         <div className='flex flex-col mb-2'>
           <span>Categories</span>
-          <ProductTypeSelector categories={categories} />
+          <ProductTypeSelector
+            options={categories}
+            registerProps={register('categoryId', { required: true })}
+            errors={errors}
+            name='categoryId'
+          />
         </div>
-        <button className='btn-primary w-full'>Guardar</button>
+        <button onClick={handleAlert} className='btn-primary w-full'>
+          Save
+        </button>
       </div>
 
       <div className='w-full'>
@@ -91,6 +154,7 @@ export const ProductForm = ({ products, categories }: Props) => {
           <input
             type='number'
             className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
+            {...register('inStock', { required: true, min: 0 })}
           />
         </div>
         {/* As checkboxes */}
@@ -99,23 +163,31 @@ export const ProductForm = ({ products, categories }: Props) => {
             <span className='block text-sm/6 font-medium text-gray-900'>
               Sizes
             </span>
-            <ul className='items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg flex dark:bg-gray-700 dark:border-gray-600 dark:text-white justify-around'>
+            <ul
+              className='w-full flex text-sm font-medium text-gray-900
+              bg-white border border-gray-200 rounded-lg dark:bg-gray-700
+               dark:border-gray-600 dark:text-white pr-2'
+            >
               {sizes.map((size, idx) => (
-                // bg-blue-500 text-white <--- si está seleccionado
                 <li
-                  className={`flex items-center ${idx !== sizes.length - 1 && 'border-gray-200 sm:border-b-0 border-r dark:border-gray-600 pr-3 sm:pr-5'}`}
+                  className={`w-full flex items-center justify-center ${
+                    idx !== sizes.length - 1 &&
+                    'border-gray-200sm:border-b-0 border-r dark:border-gray-600'
+                  }`}
                   key={size}
                   // onClick={() => onSizeChanged(size)}
                 >
                   <input
                     id={size}
                     type='checkbox'
-                    value=''
-                    className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                    value={size}
+                    // eslint-disable-next-line max-len
+                    className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 ${errors['sizes'] ? 'dark:focus:ring-red-600' : 'dark:focus:ring-blue-600'}`}
+                    {...register('sizes', { required: true })}
                   />
                   <label
                     htmlFor={size}
-                    className='w-full py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'
+                    className='py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'
                   >
                     {size}
                   </label>
@@ -130,7 +202,10 @@ export const ProductForm = ({ products, categories }: Props) => {
             >
               Product Image
             </label>
-            <div className='mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
+            <div
+              className={`mt-2 flex justify-center rounded-lg border border-dashed
+              border-gray-900/25 px-6 py-10`}
+            >
               <div className='text-center'>
                 <HiOutlinePhoto
                   aria-hidden='true'
@@ -139,14 +214,15 @@ export const ProductForm = ({ products, categories }: Props) => {
                 <div className='mt-4 flex text-sm/6 text-gray-600'>
                   <label
                     htmlFor='file-upload'
-                    className='relative cursor-pointer rounded-md font-semibold text-indigo-600 focus-within:outline-none hover:text-indigo-500'
+                    className='relative cursor-pointer rounded-md font-semibold text-indigo-600
+                    focus-within:outline-none hover:text-indigo-500'
                   >
                     <span>Upload a file</span>
                     <input
                       id='file-upload'
                       className='sr-only'
                       type='file'
-                      // {...register('images')}
+                      {...register('images')}
                       multiple
                       accept='image/png, image/jpeg, image/avif'
                     />
@@ -160,6 +236,7 @@ export const ProductForm = ({ products, categories }: Props) => {
             </div>
           </div>
         </div>
+        <Alert message={alertMessage} isVisible={showAlert} />
       </div>
     </form>
   );
