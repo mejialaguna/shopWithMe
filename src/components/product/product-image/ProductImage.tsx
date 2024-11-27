@@ -31,7 +31,8 @@ export const ProductImage = ({
       height={ height}
       alt={ alt }
       className={ className }
-      style={ style }
+      style={style}
+      draggable={false}
     />
   );
 };

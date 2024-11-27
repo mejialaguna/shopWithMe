@@ -8,7 +8,8 @@ export const getProductBySlug = async (slug: string) => {
         ProductImage: {
           select: {
             url: true,
-          },  
+            id: true,
+          },
         },
       },
       where: {
@@ -23,7 +24,8 @@ export const getProductBySlug = async (slug: string) => {
     const { ProductImage, ...res } = product
     return {
       ...res,
-      images: ProductImage.map((image: {url: string}) => image.url),
+      images: ProductImage.map((image: { url: string }) => image.url),
+      ProductImage,
     };
 
   } catch (error) {

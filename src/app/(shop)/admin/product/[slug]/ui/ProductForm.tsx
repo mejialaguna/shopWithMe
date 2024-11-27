@@ -1,20 +1,25 @@
 /* eslint-disable max-len */
 'use client';
 
-import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCallback, useState } from 'react';
 import { ProductTypeSelector } from '@/components/ProductTypeSelector';
 import { useForm } from 'react-hook-form';
 import { HiOutlinePhoto } from 'react-icons/hi2';
-import { Product } from '@/interfaces';
+import { RiDeleteBin2Fill } from 'react-icons/ri';
+import { Product, ProductImage as ProductWithImage } from '@/interfaces';
 import { Category } from '@prisma/client';
 import { Alert } from '@/components/Alert';
+import { ProductImage } from '@/components/product/product-image/ProductImage';
+import { useRouter } from 'next/navigation';
+import { createUpdateProduct } from '@/actions/product/createUpdateProduct';
 
 interface Props {
-  products: Product;
-  categories: Category[]
+  product: Partial<Product> & { ProductImage?: ProductWithImage[] };
+  categories: Category[];
 }
 
 interface FormInputs {
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -25,40 +30,87 @@ interface FormInputs {
   gender: 'men' | 'women' | 'kid' | 'unisex';
   categoryId: string;
 
+  ProductImage: ProductWithImage[];
   images?: FileList;
 }
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const gendersTypes= ['Men', 'Women', 'Kid', 'Unisex'];
 
-export const ProductForm = ({ products, categories }: Props) => {
+export const ProductForm = ({ product, categories }: Props) => {
+  const router = useRouter();
+  const [isOk, setIsOk] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | undefined>('');
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
     formState: { isValid, errors },
-    // getValues,
-    // setValue,
+    getValues,
+    setValue,
     watch,
   } = useForm<FormInputs>({
     defaultValues: {
-      ...products,
-      tags: products.tags?.join(', '),
-      sizes: products.sizes ?? [],
+      ...product,
+      tags: product.tags?.join(', '),
+      sizes: product.sizes ?? [],
 
-
+      images: undefined,
     },
   });
   const watchedErrors = watch();
+
   const onSubmit = useCallback(async (data: FormInputs) => {
-    console.log(data)
+    const formData = new FormData();
+    const { images, id, ProductImage, ...productToSave } = data;
+
+    if (product?.id) {
+      formData.append('id', product.id ?? '');
+    }
+
+
+    for (const [key, value] of Object.entries(productToSave)) {
+      console.log(`${key}`, value.toString());
+      formData.append(`${key}`, value.toString());
+    }
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+      }
+    }
+
+    const { ok, message } = await createUpdateProduct(formData);
+
+    if (!ok) {
+      setIsOk(false);
+      setAlertMessage(message);
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+      return
+    }
+
+    setIsOk(true);
+    setAlertMessage('Product updated');
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+
+    //  router.replace(`/admin/product/${updatedProduct?.slug}`);
   }, []);
+  
+  // console.log(product);
 
   const handleAlert = useCallback(() => {
     const firstErrorKey = (Object.keys(watchedErrors) as (keyof FormInputs)[]).find((key) => !watchedErrors[key]);
     
     if (firstErrorKey) {
+      setIsOk(false);
       setAlertMessage(`"${firstErrorKey.toUpperCase()}" field is required.`);
       setShowAlert(true);
 
@@ -67,6 +119,12 @@ export const ProductForm = ({ products, categories }: Props) => {
       }, 3000);
     }
   }, [watchedErrors]);
+
+  const onSizeChanged = useCallback((size: string) => {
+    const sizes = new Set(getValues('sizes'));
+    sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+    setValue('sizes', Array.from(sizes));
+  }, []);
 
   return (
     <form
@@ -175,19 +233,19 @@ export const ProductForm = ({ products, categories }: Props) => {
                     'border-gray-200sm:border-b-0 border-r dark:border-gray-600'
                   }`}
                   key={size}
-                  // onClick={() => onSizeChanged(size)}
+                  onClick={() => onSizeChanged(size)}
                 >
                   <input
                     id={size}
                     type='checkbox'
                     value={size}
                     // eslint-disable-next-line max-len
-                    className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 ${errors['sizes'] ? 'dark:focus:ring-red-600' : 'dark:focus:ring-blue-600'}`}
+                    className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 cursor-pointer ${errors['sizes'] ? 'dark:focus:ring-red-600' : 'dark:focus:ring-blue-600'}`}
                     {...register('sizes', { required: true })}
                   />
                   <label
                     htmlFor={size}
-                    className='py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'
+                    className='py-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer'
                   >
                     {size}
                   </label>
@@ -235,8 +293,28 @@ export const ProductForm = ({ products, categories }: Props) => {
               </div>
             </div>
           </div>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+            {product.ProductImage?.map((image) => (
+              <div key={image.id} className='relative group'>
+                <ProductImage
+                  alt={product.title ?? ''}
+                  src={image.url}
+                  width={300}
+                  height={300}
+                  className='rounded shadow-md'
+                />
+                <button
+                  type='button'
+                  // onClick={() => deleteProductImage(image.id, image.url)}
+                  className='absolute top-2 right-2 bg-white p-2 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.8)] hover:shadow-[0_6px_15px_rgba(0,0,0,1)] hover:scale-110 transition-all duration-400 ease-in-out active:scale-95 opacity-0 group-hover:opacity-100'
+                >
+                  <RiDeleteBin2Fill className='text-red-500 w-5 h-5' />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-        <Alert message={alertMessage} isVisible={showAlert} />
+        <Alert message={alertMessage} isVisible={showAlert} isOk={isOk} />
       </div>
     </form>
   );
