@@ -1,22 +1,33 @@
-export const revalidate = 0;
+export const revalidate = 1;
 
 import Link from 'next/link'
 import { Title } from '@/components/ui/Title';
 import { getPaginationProductWithImages } from '@/actions/product/product-pagination';
 import { ProductImage } from '@/components/product/product-image/ProductImage';
 import { Pagination } from '@/components';
+import { SelectGenre } from '@/components/SelectGenre';
+import { Gender } from '@prisma/client';
 
-interface Props {
+export interface PageProps {
+  params: {
+    gender: string;
+  };
   searchParams: {
     page?: string;
+    gender?: string;
   };
 }
-const labels = ['Image', 'Title', 'Price', 'Gender', 'Inventory', 'Sizes'];
+const labels = ['Image', 'Title', 'Price', 'Inventory', 'Sizes'];
 
-export default async function ({searchParams}: Props) {
+export default async function ({ searchParams }: PageProps) {
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
   const take = 10;
-  const { products, totalPages, productsCount } = await getPaginationProductWithImages({ page, take });
+  const gender = searchParams?.gender as Gender;
+  let paginationProps: { page: number; take: number; gender?: Gender } = { page, take };
+
+  if (gender) paginationProps = { ...paginationProps, gender };
+
+  const { products, totalPages, productsCount } = await getPaginationProductWithImages({ ...paginationProps });
 
   return (
     <>
@@ -45,6 +56,12 @@ export default async function ({searchParams}: Props) {
                   {label}
                 </th>
               ))}
+              <th
+                scope='col'
+                className='text-sm font-medium text-gray-900 px-6 py-4'
+              >
+                <SelectGenre initialgenre={gender} />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -74,14 +91,17 @@ export default async function ({searchParams}: Props) {
                   <td className='text-sm text-gray-900 font-light px-6'>
                     {order?.price}
                   </td>
-                  <td className='text-sm text-gray-900 font-light px-6 '>
+                  {/* <td className='text-sm text-gray-900 font-light px-6 '>
                     {order?.gender}
-                  </td>
+                  </td> */}
                   <td className='text-sm text-gray-900 font-light px-6 '>
                     {order?.inStock}
                   </td>
                   <td className='text-sm text-gray-900 font-light px-6 '>
                     {order?.sizes.join(' - ')}
+                  </td>
+                  <td className='text-sm text-gray-900 font-light px-6 '>
+                    {order?.gender}
                   </td>
                 </tr>
               );
