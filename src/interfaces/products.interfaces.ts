@@ -1,5 +1,3 @@
-import { string } from "zod";
-
 export interface Product {
   id: string;
   description: string;

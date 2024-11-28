@@ -80,6 +80,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
   const onSubmit = useCallback(async (data: FormInputs) => {
     const formData = new FormData();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { images, id, ProductImage, ...productToSave } = data;
 
     if (product?.id) {

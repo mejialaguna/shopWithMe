@@ -35,6 +35,7 @@ export const PlaceOrder = () => {
         size: items.size,
       };
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { message, ok, order, prismaTx } = await placeOrder(cart, address);
 
      if (!ok) {
@@ -50,7 +51,7 @@ export const PlaceOrder = () => {
     router.replace(`orders/${order?.id}`);
 
     setIsOrderPlace(false);
-  }, [productsInCart]);
+  }, [address, clearCart, productsInCart, router]);
 
   if (!isLoading) {
     return (

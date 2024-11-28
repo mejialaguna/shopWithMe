@@ -53,6 +53,7 @@ export const createUpdateProduct = async (formData: FormData) => {
   const { id, ...rest } = product;
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const prismaTx = await prisma.$transaction(async (tx) => {
       let product: Product;
       const tagsArray = rest.tags
@@ -144,7 +145,8 @@ const uploadImages = async (images: File[]) => {
 
         return result.secure_url;
       } catch (error) {
-        console.error('Error uploading image:', error);
+        // eslint-disable-next-line no-console
+        console.error(error);
         return null;
       }
     });
@@ -154,20 +156,20 @@ const uploadImages = async (images: File[]) => {
     // Filter out null results
     return uploadedImages.filter((url) => url !== null);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error processing images:', error);
     return null;
   }
 };
-
 export const deleteProductImage = async (id: number, cloudinaryUrl: string ) => {
   if (!cloudinaryUrl?.startsWith('http')) {
     const message = !cloudinaryUrl?.startsWith('http') ? 'cant delete this image from the file system' : 'missing image id OR image url'
 
     return {
       ok: false,
-      error: message,
+      error: message
     };
-  };
+  }
 
   const match = cloudinaryUrl.match(/\/v\d+\/(.+)\.\w+$/);
   const cloudinaryId = match ? match[1] : '';

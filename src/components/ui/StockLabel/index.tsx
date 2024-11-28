@@ -1,19 +1,19 @@
 'use client';
 
-import { getProductBySlug } from '@/actions/product/get-product-by-slug';
-import { titleFonts } from '@/config/font';
 import React, { useCallback, useEffect, useState } from 'react';
+import { titleFonts } from '@/config/font';
+import { getProductBySlug } from '@/actions/product/get-product-by-slug';
 
 interface StockLabelProp {
   slug: string;
 }
 export const StockLabel = ({ slug }: StockLabelProp) => {
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const getStock = useCallback(async () => {
-    const { inStock } = await getProductBySlug(slug);
-    setStock(inStock);
+    const product = await getProductBySlug(slug);
+    setStock(product?.inStock ?? 0);
     setIsLoading(false);
   }, [slug]);
 

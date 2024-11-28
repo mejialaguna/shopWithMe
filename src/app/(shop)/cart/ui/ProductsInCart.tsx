@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
-import Image from 'next/image';
 import { QuantitySelector } from '@/components';
 import { CartProduct } from '@/interfaces';
 import { useCartStore } from '@/store/cart/cart-store';

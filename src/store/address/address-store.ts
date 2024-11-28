@@ -18,6 +18,7 @@ interface State {
 
 export const useAddressStore = create<State>()(
   persist(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (set, get) => ({
       //first we need to start the state
       address: {

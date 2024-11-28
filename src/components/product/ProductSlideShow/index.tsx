@@ -18,7 +18,6 @@ import {
   Thumbs,
 } from 'swiper/modules';
 
-import Image from 'next/image';
 import { ProductImage } from '../product-image/ProductImage';
 
 interface ProductSlideShowProp {
@@ -86,6 +85,7 @@ export const ProductSlideShow = ({
               height={200}
               additionalProps={{
                 priority: true,
+                // eslint-disable-next-line max-len
                 sizes: '(min-width: 1040px) calc(40vw - 34px), (min-width: 800px) calc(65.91vw - 56px), (min-width: 640px) 85vw, (min-width: 400px) 99.09vw, calc(73.75vw + 76px)',
               }}
             />
