@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
 
 interface Props {
   src?: string;
@@ -7,6 +7,7 @@ interface Props {
   style?: React.StyleHTMLAttributes<HTMLImageElement>['style'];
   width: number;
   height: number;
+  additionalProps?: Partial<ImageProps> & React.HTMLAttributes<HTMLImageElement>
 }
 
 export const ProductImage = ({
@@ -15,24 +16,26 @@ export const ProductImage = ({
   className,
   style,
   width,
-  height
+  height,
+  additionalProps,
 }: Props) => {
 
-  const localSrc = ( src ) 
-    ? src.startsWith('http') // https://urlcompletodelaimagen.jpg
+  const localSrc = src
+    ? src.startsWith('http') || src.startsWith('blob')
       ? src
-      : `/products/${ src }`
+      : `/products/${src}`
     : '/imgs/placeholder.jpg';
 
   return (
     <Image
-      src={ localSrc }
-      width={ width }
-      height={ height}
-      alt={ alt }
-      className={ className }
+      src={localSrc}
+      width={width}
+      height={height}
+      alt={alt}
+      className={className}
       style={style}
       draggable={false}
+      {...additionalProps}
     />
   );
 };

@@ -29,6 +29,7 @@ export const SelectGenre = ({ initialgenre }: Props) => {
          newUrl = pathName;
        } else {
          const params = new URLSearchParams(searchParams.toString());
+         params.delete('page');
          params.set('gender', selectedGender);
          newUrl = `${pathName}?${params.toString()}`;
        }
@@ -39,7 +40,7 @@ export const SelectGenre = ({ initialgenre }: Props) => {
 
   return (
     <div className='flex flex-col'>
-      <label htmlFor='genderType'>Gender by</label>
+      <label htmlFor='genderType'>Filter by Gender</label>
       <select
         id='genderType'
         value={genderType}

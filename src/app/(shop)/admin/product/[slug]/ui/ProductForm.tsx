@@ -11,7 +11,7 @@ import { Category } from '@prisma/client';
 import { Alert } from '@/components/Alert';
 import { ProductImage } from '@/components/product/product-image/ProductImage';
 import { useRouter } from 'next/navigation';
-import { createUpdateProduct } from '@/actions/product/createUpdateProduct';
+import { createUpdateProduct, deleteProductImage } from '@/actions/product/createUpdateProduct';
 
 interface Props {
   product: Partial<Product> & { ProductImage?: ProductWithImage[] };
@@ -34,18 +34,24 @@ interface FormInputs {
   images?: FileList;
 }
 
+interface UploadinImages {
+    id?: number;
+    url?: string;
+}
+
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const gendersTypes= ['Men', 'Women', 'Kid', 'Unisex'];
 
 export const ProductForm = ({ product, categories }: Props) => {
   const router = useRouter();
-  const [isOk, setIsOk] = useState(false);
+  const [isOk, setIsOk] = useState(true);
   const [alertMessage, setAlertMessage] = useState<string | undefined>('');
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [uploadedImages, setUploadedImages] = useState<UploadinImages[] | []>([]);
   const {
     handleSubmit,
     register,
-    formState: { isValid, errors },
+    formState: { errors },
     getValues,
     setValue,
     watch,
@@ -60,6 +66,18 @@ export const ProductForm = ({ product, categories }: Props) => {
   });
   const watchedErrors = watch();
 
+  const handleAlert = useCallback((ok:boolean = false, message:string = '') => {
+    setIsOk(ok);
+    setAlertMessage(message);
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+      setIsOk(false);
+    }, 3000);
+  }, []);
+
+
   const onSubmit = useCallback(async (data: FormInputs) => {
     const formData = new FormData();
     const { images, id, ProductImage, ...productToSave } = data;
@@ -68,10 +86,8 @@ export const ProductForm = ({ product, categories }: Props) => {
       formData.append('id', product.id ?? '');
     }
 
-
     for (const [key, value] of Object.entries(productToSave)) {
-      console.log(`${key}`, value.toString());
-      formData.append(`${key}`, value.toString());
+      formData.append(`${key}`, value.toString().trim());
     }
 
     if (images) {
@@ -80,43 +96,24 @@ export const ProductForm = ({ product, categories }: Props) => {
       }
     }
 
-    const { ok, message } = await createUpdateProduct(formData);
+    const { ok, product:updatedProduct, message } = await createUpdateProduct(formData);
 
     if (!ok) {
-      setIsOk(false);
-      setAlertMessage(message);
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 3000);
-      return
+      handleAlert(false, message);
+      return;
     }
 
-    setIsOk(true);
-    setAlertMessage('Product updated');
-    setShowAlert(true);
+    handleAlert(true, message);
 
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 3000);
-
-    //  router.replace(`/admin/product/${updatedProduct?.slug}`);
+     router.replace(`/admin/product/${updatedProduct?.slug}`);
   }, []);
-  
-  // console.log(product);
 
-  const handleAlert = useCallback(() => {
+  const handleFieldCheck = useCallback(() => {
     const firstErrorKey = (Object.keys(watchedErrors) as (keyof FormInputs)[]).find((key) => !watchedErrors[key]);
     
     if (firstErrorKey) {
-      setIsOk(false);
-      setAlertMessage(`"${firstErrorKey.toUpperCase()}" field is required.`);
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 3000);
+      const message = `"${firstErrorKey.toUpperCase()}" field is required.`;
+      handleAlert(false, message);
     }
   }, [watchedErrors]);
 
@@ -124,6 +121,28 @@ export const ProductForm = ({ product, categories }: Props) => {
     const sizes = new Set(getValues('sizes'));
     sizes.has(size) ? sizes.delete(size) : sizes.add(size);
     setValue('sizes', Array.from(sizes));
+  }, []);
+
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files; 
+    if (!files) {
+      return;
+    }
+
+    const imagePreviews = Array.from(files).map((file) => ({
+      id: file.lastModified,
+      url: URL.createObjectURL(file),
+    }));
+
+    setUploadedImages(imagePreviews);
+  }, []);
+
+  const handleDeleteImage = useCallback(async (id: number, url: string) => {
+
+    const { ok, message } = await deleteProductImage(id, url);
+
+    handleAlert(ok, message);
+
   }, []);
 
   return (
@@ -167,6 +186,7 @@ export const ProductForm = ({ product, categories }: Props) => {
             type='number'
             className={`p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm/6 px-3 ${errors['price'] ? 'outline-red-600' : 'focus:ring-indigo-600'}`}
             {...register('price', { required: true, min: 0 })}
+            min={0}
           />
         </div>
 
@@ -199,7 +219,7 @@ export const ProductForm = ({ product, categories }: Props) => {
             name='categoryId'
           />
         </div>
-        <button onClick={handleAlert} className='btn-primary w-full'>
+        <button onClick={handleFieldCheck} className='btn-primary w-full'>
           Save
         </button>
       </div>
@@ -213,6 +233,7 @@ export const ProductForm = ({ product, categories }: Props) => {
             type='number'
             className='p-2 border rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-3'
             {...register('inStock', { required: true, min: 0 })}
+            min={0}
           />
         </div>
         {/* As checkboxes */}
@@ -283,6 +304,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                       {...register('images')}
                       multiple
                       accept='image/png, image/jpeg, image/avif'
+                      onChange={handleFileChange}
                     />
                   </label>
                   <p className='pl-1'>or drag and drop</p>
@@ -294,22 +316,27 @@ export const ProductForm = ({ product, categories }: Props) => {
             </div>
           </div>
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
-            {product.ProductImage?.map((image) => (
-              <div key={image.id} className='relative group'>
+            {(product?.ProductImage?.length
+              ? product?.ProductImage
+              : uploadedImages
+            )?.map((image) => (
+              <div key={image?.id} className='relative group'>
                 <ProductImage
-                  alt={product.title ?? ''}
-                  src={image.url}
+                  alt={product?.title ?? ''}
+                  src={image?.url}
                   width={300}
                   height={300}
                   className='rounded shadow-md'
                 />
-                <button
-                  type='button'
-                  // onClick={() => deleteProductImage(image.id, image.url)}
-                  className='absolute top-2 right-2 bg-white p-2 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.8)] hover:shadow-[0_6px_15px_rgba(0,0,0,1)] hover:scale-110 transition-all duration-400 ease-in-out active:scale-95 opacity-0 group-hover:opacity-100'
-                >
-                  <RiDeleteBin2Fill className='text-red-500 w-5 h-5' />
-                </button>
+                {image?.id !== undefined && image?.url !== undefined && (
+                  <button
+                    type='button'
+                    onClick={() => handleDeleteImage(image.id ?? 0, image.url ?? '')}
+                    className='absolute top-2 right-2 bg-white p-2 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.8)] hover:shadow-[0_6px_15px_rgba(0,0,0,1)] hover:scale-110 transition-all duration-400 ease-in-out active:scale-95 opacity-0 group-hover:opacity-100'
+                  >
+                    <RiDeleteBin2Fill className='text-red-500 w-5 h-5' />
+                  </button>
+                )}
               </div>
             ))}
           </div>

@@ -28,6 +28,7 @@ export const AdminMenu = ({ closeSideMenu }: Props) => {
       </Link>
       <Link
         href='/admin/users'
+        onClick={closeSideMenu}
         className='flex items-center mt-6 p-2 hover:bg-gray-100 rounded transition-all '
       >
         <IoPeopleOutline size={20} />

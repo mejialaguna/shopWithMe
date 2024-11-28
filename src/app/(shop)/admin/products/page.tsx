@@ -7,6 +7,7 @@ import { ProductImage } from '@/components/product/product-image/ProductImage';
 import { Pagination } from '@/components';
 import { SelectGenre } from '@/components/SelectGenre';
 import { Gender } from '@prisma/client';
+import { currencyFormatter } from '@/utils/currencyFormatter';
 
 export interface PageProps {
   params: {
@@ -37,7 +38,7 @@ export default async function ({ searchParams }: PageProps) {
         <Link
           className='rounded-full bg-blue-500 text-slate-100 px-3 py-1 hover:bg-blue-700
           transition-all duration-300 ease-in-out hover:shadow-lg active:scale-95'
-          href='/admin/product/add-new'
+          href='/admin/product/new'
         >
           Add new product
         </Link>
@@ -51,14 +52,14 @@ export default async function ({ searchParams }: PageProps) {
                 <th
                   key={label}
                   scope='col'
-                  className='text-sm font-medium text-gray-900 px-6 py-4 text-center'
+                  className='text-sm font-extrabold text-gray-900 px-6 py-4 text-center'
                 >
                   {label}
                 </th>
               ))}
               <th
                 scope='col'
-                className='text-sm font-medium text-gray-900 px-6 py-4'
+                className='text-sm font-bold text-gray-900 px-6 py-4'
               >
                 <SelectGenre initialgenre={gender} />
               </th>
@@ -80,7 +81,7 @@ export default async function ({ searchParams }: PageProps) {
                       className='w-20 h-20 object-cover rounded'
                     />
                   </td>
-                  <td className='text-sm text-blue-500 font-light px-6 py-4 whitespace-nowrap'>
+                  <td className='text-sm text-blue-500 font-semibold px-6 py-4 whitespace-nowrap'>
                     <Link
                       href={`/admin/product/${order?.slug}`}
                       className='hover:underline'
@@ -88,19 +89,17 @@ export default async function ({ searchParams }: PageProps) {
                       {order?.title}
                     </Link>
                   </td>
-                  <td className='text-sm text-gray-900 font-light px-6'>
-                    {order?.price}
+                  <td className='text-sm text-gray-900 px-6 font-black'>
+                    {currencyFormatter(order?.price)}
                   </td>
-                  {/* <td className='text-sm text-gray-900 font-light px-6 '>
-                    {order?.gender}
-                  </td> */}
-                  <td className='text-sm text-gray-900 font-light px-6 '>
+                  {}
+                  <td className='text-sm text-gray-900 font-semibold px-6 '>
                     {order?.inStock}
                   </td>
-                  <td className='text-sm text-gray-900 font-light px-6 '>
+                  <td className='text-sm text-gray-900 font-semibold px-6 '>
                     {order?.sizes.join(' - ')}
                   </td>
-                  <td className='text-sm text-gray-900 font-light px-6 '>
+                  <td className='text-sm text-gray-900 font-semibold px-6 '>
                     {order?.gender}
                   </td>
                 </tr>

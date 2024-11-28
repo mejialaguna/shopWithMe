@@ -1,10 +1,10 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/interfaces';
 import { cn } from '@/utils/cn';
+import { ProductImage } from '@/components/product/product-image/ProductImage';
 
 interface ProductProps {
   products: Product;
@@ -37,15 +37,21 @@ export const ProductGridItem = ({ products }: ProductProps) => {
       >
         <div className='relative z-50'>
           <div className='p-4 flex flex-col'>
-            <Image
+            <ProductImage
               className='self-center rounded-md transition-all duration-1000 bg-white'
               width={400}
               height={400}
-              src={`/products/${showImage}`}
+              src={showImage}
               alt='product image'
-              priority
-              onMouseEnter={() => setShowImage(products.images[1])}
-              onMouseLeave={() => setShowImage(products.images[0])}
+              additionalProps={{
+                onMouseEnter: () => setShowImage(products.images[1]),
+                onMouseLeave: () => setShowImage(products.images[0]),
+                priority: true,
+                style: {
+                  height: '250px',
+                  width: '400px'
+                }
+              }}
             />
             <Link
               className={cn(
