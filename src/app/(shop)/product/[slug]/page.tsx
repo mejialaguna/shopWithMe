@@ -25,14 +25,20 @@ export async function generateMetadata(
   // read route params
   const slug = params.slug;
 
-  const product = await await getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
+  const image = product?.images[1] || product?.images[0] ;
+
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
     title: product?.title,
     description: product?.description,
     openGraph: {
       title: product?.title,
       description: product?.description,
-      images: [`/product/${product?.images[1]}`],
+      images: [
+        ...(image ? [`/product/${image}`] : []), // Add only if `image` exists
+        'https://res.cloudinary.com/jlml/image/upload/v1732854541/shop-with-me/nl7nmglwobqi3thdvoor.jpg',
+      ],
     },
   };
 }
