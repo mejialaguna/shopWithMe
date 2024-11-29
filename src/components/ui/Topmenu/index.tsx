@@ -36,7 +36,7 @@ export const TopMenu = () => {
         </Link>
       </div>
       <div className='flex items-center transition-all'>
-        <Link href='/search' className=' p-2 rounded-md hover:bg-gray-100'>
+        <Link href='/' className=' p-2 rounded-md hover:bg-gray-100'>
           <IoSearchOutline className='w-5 h-5' />
         </Link>
         <CartMenuButtom />
